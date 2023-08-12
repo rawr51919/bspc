@@ -332,13 +332,13 @@ char *ExpandPath (char *path)
 char *ExpandPathAndArchive (char *path)
 {
 	char	*expanded;
-	char	archivename[1024];
+	char	archivename[2048];
 
 	expanded = ExpandPath (path);
 
 	if (archive)
 	{
-		sprintf (archivename, "%s/%s", archivedir, path-1);
+		sprintf (archivename, "%s/%s", archivedir, path);
 		QCopyFile (expanded, archivename);
 	}
 	return expanded;
