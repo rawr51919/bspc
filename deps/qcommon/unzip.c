@@ -1108,7 +1108,10 @@ static int unzlocal_getShort (FILE* fin, uLong *pX)
 {
 	short	v;
 
-	fread( &v, sizeof(v), 1, fin );
+  if (fread(&v, sizeof(v), 1, fin) != sizeof(v))
+  {
+    perror("Could not read data from compressed file.");
+  }
 
 	*pX = LittleShort( v);
 	return UNZ_OK;
@@ -1137,7 +1140,10 @@ static int unzlocal_getLong (FILE *fin, uLong *pX)
 {
 	int		v;
 
-	fread( &v, sizeof(v), 1, fin );
+  if (fread(&v, sizeof(v), 1, fin) != sizeof(v))
+  {
+    perror("Could not read data from compressed file.");
+  }
 
 	*pX = LittleLong( v);
 	return UNZ_OK;
@@ -1412,8 +1418,10 @@ extern int unzClose (unzFile file)
 		return UNZ_PARAMERROR;
 	s=(unz_s*)file;
 
-    if (s->pfile_in_zip_read!=NULL)
-        unzCloseCurrentFile(file);
+  if (s->pfile_in_zip_read != NULL)
+  {
+    unzCloseCurrentFile(file);
+  }
 
 	fclose(s->file);
 	TRYFREE(s);
@@ -1737,8 +1745,10 @@ extern int unzLocateFile (unzFile file, const char *szFileName, int iCaseSensiti
 	if (file==NULL)
 		return UNZ_PARAMERROR;
 
-    if (strlen(szFileName)>=UNZ_MAXFILENAMEINZIP)
-        return UNZ_PARAMERROR;
+  if (strlen(szFileName) >= UNZ_MAXFILENAMEINZIP)
+  {
+    return UNZ_PARAMERROR;
+  }
 
 	s=(unz_s*)file;
 	if (!s->current_file_ok)
@@ -1816,8 +1826,10 @@ static int unzlocal_CheckCurrentFileCoherencyHeader (unz_s* s, uInt* piSizeVar,
                          (s->cur_file_info.compression_method!=Z_DEFLATED))
         err=UNZ_BADZIPFILE;
 
-	if (unzlocal_getLong(s->file,&uData) != UNZ_OK) /* date/time */
-		err=UNZ_ERRNO;
+  if (unzlocal_getLong(s->file,&uData) != UNZ_OK) /* date/time */
+  {
+    err = UNZ_ERRNO;
+  }
 
 	if (unzlocal_getLong(s->file,&uData) != UNZ_OK) /* crc */
 		err=UNZ_ERRNO;
@@ -1876,8 +1888,8 @@ extern int unzOpenCurrentFile (unzFile file)
 	if (!s->current_file_ok)
 		return UNZ_PARAMERROR;
 
-    if (s->pfile_in_zip_read != NULL)
-        unzCloseCurrentFile(file);
+  if (s->pfile_in_zip_read != NULL)
+    unzCloseCurrentFile(file);
 
 	if (unzlocal_CheckCurrentFileCoherencyHeader(s,&iSizeVar,
 				&offset_local_extrafield,&size_local_extrafield)!=UNZ_OK)
@@ -3036,7 +3048,6 @@ static int huft_build(uInt *b, uInt n, uInt s, const uInt *d, const uInt *e, inf
   int y;                        /* number of dummy codes added */
   uInt z;                       /* number of entries in current table */
 
-
   /* Generate counts for each bit length */
   p = c;
 #define C0 *p++ = 0;
@@ -3196,6 +3207,7 @@ static int huft_build(uInt *b, uInt n, uInt s, const uInt *d, const uInt *e, inf
 
   /* Return Z_BUF_ERROR if we were given an incomplete table */
   return y != 0 && g != 1 ? Z_BUF_ERROR : Z_OK;
+  puts(inflate_copyright);
 }
 
 

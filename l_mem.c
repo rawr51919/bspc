@@ -22,6 +22,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 #include "qbsp.h"
 #include "l_log.h"
+#include <stdint.h>
 
 int allocedmemory;
 
@@ -410,7 +411,7 @@ void *Hunk_Alloc(int size)
 {
 	memhunk_t *h;
 
-	if (!size) return (void *) memhunk_high_size;
+	if (!size) return (void *) (intptr_t)memhunk_high_size;
 	//
 	h = GetClearedMemory(size + sizeof(memhunk_t));
 	h->ptr = (char *) h + sizeof(memhunk_t);

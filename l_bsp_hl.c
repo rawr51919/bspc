@@ -640,7 +640,7 @@ void HL_WriteBSPFile (char *filename)
 
 //============================================================================
 
-#define ENTRIES(a)		(sizeof(a)/sizeof(*(a)))
+#define ENTRIES(a)		((&a)[1] - a)
 #define ENTRYSIZE(a)	(sizeof(*(a)))
 
 unsigned ArrayUsage( char *szItem, int items, int maxitems, int itemsize )

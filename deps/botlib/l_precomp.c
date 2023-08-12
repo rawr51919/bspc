@@ -739,7 +739,7 @@ int PC_ExpandBuiltinDefine(source_t *source, token_t *deftoken, define_t *define
 		case BUILTIN_DATE:
 		{
 			t = time(NULL);
-			curtime = ctime(&t);
+			curtime = ctime((const long int *)&t);
 			strcpy(token->string, "\"");
 			strncat(token->string, curtime+4, 7);
 			strncat(token->string+7, curtime+20, 4);
@@ -754,7 +754,7 @@ int PC_ExpandBuiltinDefine(source_t *source, token_t *deftoken, define_t *define
 		case BUILTIN_TIME:
 		{
 			t = time(NULL);
-			curtime = ctime(&t);
+			curtime = ctime((const long int *)&t);
 			strcpy(token->string, "\"");
 			strncat(token->string, curtime+11, 8);
 			strcat(token->string, "\"");
@@ -1702,7 +1702,7 @@ int PC_EvaluateTokens(source_t *source, token_t *tokens, signed long int *intval
 	int lastoperatortype = 0;
 	//
 	operator_t operator_heap[MAX_OPERATORS];
-	int numoperators = 0;
+	int numoperators = lastoperatortype = 0;
 	value_t value_heap[MAX_VALUES];
 	int numvalues = 0;
 
@@ -2997,7 +2997,7 @@ source_t *LoadSourceFile(const char *filename)
 	source = (source_t *) GetMemory(sizeof(source_t));
 	Com_Memset(source, 0, sizeof(source_t));
 
-	strncpy(source->filename, filename, MAX_PATH);
+	strncpy(source->filename, filename, MAX_PATH-1);
 	source->scriptstack = script;
 	source->tokens = NULL;
 	source->defines = NULL;
@@ -3030,7 +3030,7 @@ source_t *LoadSourceMemory(char *ptr, int length, char *name)
 	source = (source_t *) GetMemory(sizeof(source_t));
 	Com_Memset(source, 0, sizeof(source_t));
 
-	strncpy(source->filename, name, MAX_PATH);
+	strncpy(source->filename, name, MAX_PATH-1);
 	source->scriptstack = script;
 	source->tokens = NULL;
 	source->defines = NULL;

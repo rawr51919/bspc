@@ -200,12 +200,17 @@ void CreateAASFilesForAllBSPFiles(char *quakepath)
 			//
 			for (qf = bspfiles; qf; qf = qf->next)
 			{
-				sprintf(aasfile, "%s/%s", qf->pakfile, qf->origname);
+				if (snprintf(aasfile, sizeof(aasfile), "%s/%s", qf->pakfile, qf->origname) >= sizeof(aasfile))
+				{
+					fprintf(stderr, "Error: AAS file name too long.");
+				}
 				Log_Print("found %s\n", aasfile);
 				strcpy(&aasfile[strlen(aasfile)-strlen(".bsp")], ".aas");
 				for (qf2 = aasfiles; qf2; qf2 = qf2->next)
 				{
-					sprintf(buf, "%s/%s", qf2->pakfile, qf2->origname);
+					if (snprintf(buf, sizeof(buf), "%s/%s", qf2->pakfile, qf2->origname) >= sizeof(buf)) {
+						fprintf(stderr, "Error: AAS file name too long.");
+					}
 					if (!stricmp(aasfile, buf))
 					{
 						Log_Print("found %s\n", buf);

@@ -332,7 +332,7 @@ char *ExpandPath (char *path)
 char *ExpandPathAndArchive (char *path)
 {
 	char	*expanded;
-	char	archivename[1024];
+	char	archivename[1025];
 
 	expanded = ExpandPath (path);
 

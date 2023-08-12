@@ -45,7 +45,7 @@ void LeakFile (tree_t *tree)
 {
 	vec3_t	mid;
 	FILE	*linefile;
-	char	filename[1024];
+	char	filename[2048];
 	node_t	*node;
 	int		count;
 
@@ -68,8 +68,8 @@ void LeakFile (tree_t *tree)
 	while (node->occupied > 1)
 	{
 		int			next;
-		portal_t	*p, *nextportal;
-		node_t		*nextnode;
+		portal_t	*p, *nextportal = NULL;
+		node_t		*nextnode = NULL;
 		int			s;
 
 		// find the best portal exit

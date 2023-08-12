@@ -35,7 +35,7 @@ textureref_t textureref[MAX_MAP_TEXTURES];
 int FindMiptex (char *name)
 {
 	int i;
-	char path[1024];
+	char path[10240];
 	miptex_t	*mt;
 
 	for (i = 0; i < nummiptex; i++)

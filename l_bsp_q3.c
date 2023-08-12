@@ -29,6 +29,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #include "l_qfiles.h"
 #include "l_bsp_q3.h"
 #include "l_bsp_ent.h"
+#include <stdint.h>
 
 void Q3_ParseEntities (void);
 void Q3_PrintBSPFileSizes(void);
@@ -523,8 +524,8 @@ void Q3_SwapBSPFile( void ) {
 	Q3_SwapBlock( (int *)q3_dbrushsides, q3_numbrushsides * sizeof( q3_dbrushsides[0] ) );
 
 	// vis
-	((int *)&q3_visBytes)[0] = LittleLong( ((int *)&q3_visBytes)[0] );
-	((int *)&q3_visBytes)[1] = LittleLong( ((int *)&q3_visBytes)[1] );
+	((int32_t *)q3_visBytes)[0] = LittleLong(((int32_t *)q3_visBytes)[0]);
+	((int32_t *)q3_visBytes)[1] = LittleLong(((int32_t *)q3_visBytes)[1]);
 
 	// drawverts (don't swap colors )
 	for ( i = 0 ; i < q3_numDrawVerts ; i++ ) {

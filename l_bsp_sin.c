@@ -916,7 +916,8 @@ void	Sin_LoadBSPFileTexinfo (char *filename)
 	sin_header = GetMemory(sizeof(sin_dheader_t));
 
 	f = fopen (filename, "rb");
-	fread (sin_header, sizeof(sin_dheader_t), 1, f);
+	if (fread(sin_header, sizeof(sin_dheader_t), 1, f) != sizeof(sin_dheader_t))
+		Error("Failed to read data from IBSP file", filename);
 
 // swap the header
 	for (i=0 ; i< sizeof(sin_dheader_t)/4 ; i++)
@@ -932,7 +933,8 @@ void	Sin_LoadBSPFileTexinfo (char *filename)
 	ofs = sin_header->lumps[SIN_LUMP_TEXINFO].fileofs;
 
 	fseek (f, ofs, SEEK_SET);
-	fread (sin_texinfo, length, 1, f);
+	if (fread(sin_texinfo, length, 1, f) != length)
+		Error("Failed to read texture info from IBSP file", filename);
 	fclose (f);
 
 	sin_numtexinfo = length / sizeof(sin_texinfo_t);

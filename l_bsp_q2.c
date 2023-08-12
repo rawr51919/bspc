@@ -922,7 +922,8 @@ void	Q2_LoadBSPFileTexinfo (char *filename)
 	q2_header = GetMemory(sizeof(dheader_t));
 
 	f = fopen (filename, "rb");
-	fread (q2_header, sizeof(dheader_t), 1, f);
+	if (fread(q2_header, sizeof(dheader_t), 1, f) != sizeof(dheader_t))
+		Error("Failed to read data from IBSP file", filename);
 
 // swap the header
 	for (i=0 ; i< sizeof(dheader_t)/4 ; i++)
@@ -938,7 +939,8 @@ void	Q2_LoadBSPFileTexinfo (char *filename)
 	ofs = q2_header->lumps[LUMP_TEXINFO].fileofs;
 
 	fseek (f, ofs, SEEK_SET);
-	fread (texinfo, length, 1, f);
+	if (fread(texinfo, length, 1, f) != length)
+		Error("Failed to read texture info from IBSP file", filename);
 	fclose (f);
 
 	numtexinfo = length / sizeof(texinfo_t);

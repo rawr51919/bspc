@@ -47,6 +47,8 @@ typedef enum {qfalse, qtrue}	qboolean;
 
 #endif //SCREWUP
 
+int		COM_Compress( char *data_p );
+
 #ifdef BOTLIB
 //include files for usage in the bot library
 #include "qcommon/q_shared.h"
